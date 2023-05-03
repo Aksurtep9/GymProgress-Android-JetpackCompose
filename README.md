@@ -3,31 +3,39 @@
 Információk [itt](https://viauav21.github.io/laborok/hf)
 
 ## Androidalapú szoftverfejlesztés
-### [Dátum - 2023 1. félév]
-### [Teljes név] - ([Neptun kód])
-### [e-mail cím] 
-### Laborvezető: [Laborvezető neve]
+### [2023. 04. 25. - 2023 1. félév]
+### [Petruska Bence] - ([JP5JDU])
+### [bence.petruska@gmail.com] 
+### Laborvezető: [Pomázi Krisztián]
 
 ## Bemutatás
 
-Az alkalmazás rövid, 2-3 mondatos bemutatása. Honnan az ötlet, mi szülte az igényt, ki lehetne a célközönség.
-A laboron és előadáson bemutatott alkalmazásokat nem lehet házi feladatnak választani.
+Az alkalmazás neve Progress Tracker, ami az edzéseink során jön jól. Amint elkezd az ember konditerembe járni, rájön, hogy egyre nehezebb a teljesítményünket követni, ebben segít az alkalmazás
+Miből? Mennyit? Hányszor? Mikor? Ezeket a kérdéseket edzés közben pihenések között megválaszoljuk és az alkalmazás elmenti nekünk. 
 
 ## Főbb funkciók
 
-Az alkalmazás minden funkciójára kiterjedő leírás. Legyen egyértelműen eldönthető, hogy az adott funkció implementálva van-e!
-P.l.: Az alkalmazással lehetőség van térképen megjeleníteni az állomáspontokat és azok A,B,C,D tulajdonságai meg is jelennek (ha elérhetőek).
+Az alkalmazás körülbelül 3-4 főnézettel és pár alnézettel fog rendelkezni.
+Az alkalmazást elindítva a **History nézet** a folyamatban lévő / befejezett edzések listája jelenik meg. Ebben a nézetben indíthatunk el új edzés "session"-t is. 
+A **History nézetben** lehetőségünk van egy térkép megnyitására is, amiben látható, hogy hol edzettünk.
+A listában egy edzésre rákattintva megjelenik az **Edzés nézet**, az adott edzéshez tartozó elvégzett gyakorlatok listája. Hozzáadhatunk illetve törölhetünk gyakorlatokat a nézetben, illetve szintén rákattinthatunk listaelemekre, ahol módosíthatjuk a súlyokat és ismétlést is.
 
+A **History nézet** mellett található egy **Progress nézet**, amiben egy jetpack-compose chart library használatával kirajzolódik egy csinos kis grafikon az előrehaladásunkról.
+Ebben a nézetben adhatjuk meg a súlyunkat is, amit szintén nyomon fog tudni követni így az applikáció.
+
+Az alkalmazás perzisztensen fogja tárolni az adatokat **Room**-al.
+A chart library valószínűleg ez lesz: [https://github.com/hi-manshu/Charty](https://github.com/hi-manshu/Charty) (de ez még változhat)
+Az edzéshez elmentődik az edzés lokációja is és a dátum.
 ## Választott technológiák:
 
 Az alkalmazás fejlesztése során használt technológiák tételes felsorolása. Az, hogy mi számít technológiának a laborokon ismertetésre kerül, a laborvezetőkkel tovább pontosítható. 
 5 technológia használata javasolt. Például:
 
 - UI: A felhasználói felület Jetpack Compose-ban és MVVM architektúrával.
-- lista: A kriptovatuták egy-két fontosabb részlettel együtt egy komplex listában jelennek meg. 
-- Hálózatkezelés: Az alkalmazás a [https://coinbin.org/](https://coinbin.org/) nyílt API-t használja, és REST végponton keresztül tölti le az kritovaluták adatait.
-- Adatbáziskezelés: A felhasználó elmentheti a számára fontos kriptovaluták listáját, amit az alkalmazás perzisztensen tárol
-- Notificationök: Az alkalmazás értesítést küld, ha egy kpritovaluta ára az elmentett értékhez képest 10%-nál többet változott.
+- lista: Több listanézet: edzések, gyakorlatok, ismétlések... 
+- Téma: A chart-hoz: [https://github.com/hi-manshu/Charty](https://github.com/hi-manshu/Charty) 
+- Adatbáziskezelés: A felhasználó adatai elmentődnek.
+- Pozíciómeghatározás: Az alkalmazás követi a pozíciónkat
 
 ___
 
