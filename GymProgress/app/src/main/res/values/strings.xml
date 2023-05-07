@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GymProgress</string>
+    <string name="some_error_message">There was an error!</string>
+    <string name="text_empty_todo_list">You haven\\ \'t added any sessions yet</string>
+    <string name="list_item_supporting_text">Support Text test</string>
+    <string name="exercises">The exercises:</string>
+    <string name="text_empty_exercise_list">There are no exercises yet.</string>
+</resources>
