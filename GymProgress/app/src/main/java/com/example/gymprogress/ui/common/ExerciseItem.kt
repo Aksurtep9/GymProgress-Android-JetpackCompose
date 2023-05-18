@@ -34,7 +34,7 @@ import com.example.gymprogress.ui.model.SetUi
 fun ExerciseItem(
     exercise: ExerciseUi,
     onDelete: () -> Unit,
-
+    onExerciseClick: () -> Unit,
     onAddSetClick: (ExerciseUi) -> Unit,
     onDeleteClick: (ExerciseUi) -> Unit,
     sets: List<SetUi>
@@ -76,7 +76,7 @@ fun ExerciseItem(
                 }
             }
 
-            if (true) {
+            if (expanded) {
                 Divider(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
 
                 sets.filter { it.exerciseId == exercise.id }.forEach { set ->
@@ -119,6 +119,7 @@ fun ExerciseItemPreview() {
     ExerciseItem(
         exercise = exercise,
         onDelete = { },
+        onExerciseClick = { },
         onAddSetClick = { },
         onDeleteClick = { },
         sets = sets

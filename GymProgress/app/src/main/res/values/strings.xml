@@ -5,4 +5,8 @@
     <string name="list_item_supporting_text">Support Text test</string>
     <string name="exercises">The exercises:</string>
     <string name="text_empty_exercise_list">There are no exercises yet.</string>
+    <string name="new_exercise">New exercise type</string>
+    <string name="Ok">Ok</string>
+    <string name="Cancel">Cancel</string>
+    <string name="new_exercise_type">Exercise type</string>
 </resources>

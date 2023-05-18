@@ -10,14 +10,14 @@ data class Exercise(
 )
 
 fun ExerciseEntity.asExercise(): Exercise = Exercise(
-    id = id,
+    id = exerciseId,
     name = name,
     sessionId = sessionId,
     maxWeight = maxWeight
 )
 
 fun Exercise.asExerciseEntity(): ExerciseEntity = ExerciseEntity(
-    id = id,
+    exerciseId = id,
     name = name,
     sessionId = sessionId,
     maxWeight = maxWeight

@@ -16,7 +16,7 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercises WHERE sessionId = :sessionId")
     fun getExercisesForSession(sessionId: Int): Flow<List<ExerciseEntity>>
 
-    @Query("SELECT * FROM exercises WHERE id = :exerciseId")
+    @Query("SELECT * FROM exercises WHERE exerciseId = :exerciseId")
     fun getExerciseById(exerciseId: Int): Flow<ExerciseEntity>
 
     // Add other queries as needed

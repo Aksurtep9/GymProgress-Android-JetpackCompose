@@ -11,14 +11,14 @@ data class Set(
 
 fun SetEntity.asSet(): Set = Set(
     id = id,
-    exerciseId = exerciseId,
+    exerciseId = exercise_Id,
     weight = weight,
     reps = reps
 )
 
 fun Set.asSetEntity(): SetEntity = SetEntity(
     id = id,
-    exerciseId = exerciseId,
+    exercise_Id = exerciseId,
     weight = weight,
     reps = reps
 )

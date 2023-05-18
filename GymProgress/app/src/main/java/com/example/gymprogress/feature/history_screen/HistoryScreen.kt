@@ -71,7 +71,7 @@ fun HistoryScreen(
                 .fillMaxSize()
                 .padding(it)
                 .background(
-                    color = if (state is HistoryListState.Loading || state is HistoryListState.Error) {
+                    color = if (state.isLoading) {
                         MaterialTheme.colorScheme.secondaryContainer
                     } else {
                         MaterialTheme.colorScheme.background
@@ -79,30 +79,31 @@ fun HistoryScreen(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            when (state) {
-                is HistoryListState.Loading -> CircularProgressIndicator(
+            if (state.isLoading) {
+                CircularProgressIndicator(
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
-                is HistoryListState.Error -> Text(
-                    text = state.error.toUiText().asString(context)
+            } else if (state.isError) {
+                Text(
+                    text = state.error?.toUiText()?.asString(context)
+                        ?: stringResource(id = R.string.some_error_message)
                 )
-                is HistoryListState.Result -> {
-                    //state.sessionList
-                    if (state.sessionList.isEmpty()) {
-                        Text(text = stringResource(id = R.string.text_empty_todo_list))
-                    } else {
+            } else {
+                if (state.sessions.isEmpty()) {
+                    Text(text = stringResource(id = R.string.text_empty_todo_list))
+                } else {
                        Column{
                            LazyColumn(modifier = Modifier.fillMaxSize()){
-                               items(state.sessionList.size) { i ->
+                               items(state.sessions.size) { i ->
                                    ListItem(
                                        headlineText = {
                                            Row(verticalAlignment = Alignment.CenterVertically,
                                                modifier = Modifier.fillMaxWidth(),
                                            horizontalArrangement = Arrangement.SpaceBetween) {
                                                    IconButton(onClick = { },
-                                                            enabled = !state.sessionList[i].finished
+                                                            enabled = !state.sessions[i].finished
                                                    ){
-                                                       if(!state.sessionList[i].finished){
+                                                       if(!state.sessions[i].finished){
                                                            Icon(imageVector = Icons.Default.ArrowRight, contentDescription = null, modifier = Modifier.size(40.dp), tint = Color.Green)
                                                        }
                                                        else{
@@ -110,7 +111,7 @@ fun HistoryScreen(
 
                                                        }
                                                    }
-                                               Text(text = state.sessionList[i].name,
+                                               Text(text = state.sessions[i].name,
                                                fontSize = 24.sp,
                                                modifier = Modifier.padding(20.dp))
                                                IconButton(
@@ -120,9 +121,9 @@ fun HistoryScreen(
                                                }
                                            }
                                        },
-                                       modifier = Modifier.clickable(onClick = { onListItemClick(state.sessionList[i].id) })
+                                       modifier = Modifier.clickable(onClick = { onListItemClick(state.sessions[i].id) })
                                    )
-                                   if (i != state.sessionList.lastIndex) {
+                                   if (i != state.sessions.lastIndex) {
                                        Divider(
                                            thickness = 2.dp,
                                            color = MaterialTheme.colorScheme.secondaryContainer
@@ -136,4 +137,3 @@ fun HistoryScreen(
             }
         }
     }
-}

@@ -14,7 +14,7 @@ interface SetDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSet(set: SetEntity)
 
-    @Query("SELECT * FROM sets WHERE exerciseId = :exerciseId")
+    @Query("SELECT * FROM sets WHERE exercise_Id = :exerciseId")
     fun getSetsForExercise(exerciseId: Int): Flow<List<SetEntity>>
 
     @Query("SELECT * FROM sets WHERE id = :setId")

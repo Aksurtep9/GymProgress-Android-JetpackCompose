@@ -36,11 +36,14 @@ fun NavGraph(
             ))
         {
             SessionScreen(
-                //sessionId = ,
                 onFinished = { /*TODO*/ },
                 onAddExercise = { /*TODO*/ },
                 onAddNewExerciseType = { /*TODO*/ },
-                onListItemClick = { }
+                onListItemClick = { },
+                onNavigateBack = { navController.popBackStack(
+                    route = Screen.SessionList.route,
+                    inclusive = true
+                )}
             )
         }
     }

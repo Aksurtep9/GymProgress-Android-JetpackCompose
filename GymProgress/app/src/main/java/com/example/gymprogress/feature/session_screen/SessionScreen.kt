@@ -58,7 +58,7 @@ fun SessionScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(text = "Your exercises", modifier = Modifier.size(60.dp))},
+            TopAppBar(title = { Text(text = "Your exercises", fontSize = 16.sp ,modifier = Modifier.size(60.dp))},
                 navigationIcon = {
                     IconButton(onClick = { onNavigateBack }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
