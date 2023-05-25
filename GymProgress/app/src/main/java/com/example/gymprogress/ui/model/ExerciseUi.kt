@@ -9,11 +9,11 @@ import java.time.LocalDateTime
 data class ExerciseUi(
     val id: Int = 0,
     val name: String = "",
-    val sessionId: Int,
+    val sessionId: Int = 0,
     val maxWeight: Float = 0.0f
 )
 
-fun ExerciseUi.asExerciseUi(): ExerciseUi = ExerciseUi(
+fun Exercise.asExerciseUi(): ExerciseUi = ExerciseUi(
     id = id,
     name = name,
     sessionId = sessionId,

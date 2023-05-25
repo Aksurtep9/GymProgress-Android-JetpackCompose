@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,13 +57,16 @@ fun SessionScreen(
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
+    val showExercisePickerDialog by remember { mutableStateOf(false)}
+    val showExerciseAdderDialog by remember { mutableStateOf(false)}
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(title = { Text(text = "Your exercises", fontSize = 16.sp ,modifier = Modifier.size(60.dp))},
                 navigationIcon = {
-                    IconButton(onClick = { onNavigateBack }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
             }, actions = {

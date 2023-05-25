@@ -15,5 +15,4 @@ data class SessionEntity(
     val finished: Boolean,
     val longitude: Double,
     val latitude: Double
-
 )

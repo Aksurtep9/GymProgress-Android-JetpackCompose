@@ -20,12 +20,12 @@ fun SessionAdderDialog(
     }
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text(text = "Enter text") },
+        title = { Text(text = "Enter Session") },
         text = {
             TextField(
                 value = sessionName,
                 onValueChange = { sessionName = it },
-                label = { Text(text = "Text") },
+                label = { Text(text = "Session name") },
                 modifier = Modifier.run { fillMaxWidth().padding(16.dp) }
             )
         },

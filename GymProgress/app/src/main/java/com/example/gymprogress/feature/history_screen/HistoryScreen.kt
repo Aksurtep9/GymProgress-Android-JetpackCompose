@@ -30,7 +30,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,8 +39,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymprogress.R
+import com.example.gymprogress.ui.common.SessionAdderDialog
 import com.example.gymprogress.ui.model.toUiText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,11 +56,13 @@ fun HistoryScreen(
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
+    var showDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             LargeFloatingActionButton(
-                onClick = onFabClick,
+                onClick = {showDialog =true},
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
@@ -135,5 +139,12 @@ fun HistoryScreen(
                     }
                 }
             }
+        if(showDialog){
+            SessionAdderDialog(onConfirm ={
+                 viewModel.onSave(it)
+                showDialog = false },
+            onDismiss = { showDialog = false}
+            )
+        }
         }
     }

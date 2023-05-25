@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-class LoadExercisesUseCase(private val exercise_repository: ExerciseRepository, private val sessionId: Int) {
+class LoadExercisesUseCase(private val exercise_repository: ExerciseRepository) {
 
-    suspend operator fun invoke(): Result<List<Exercise>>{
+    suspend fun loadExercises(sessionId: Int): Result<List<Exercise>>{
         return try{
             val exercises = exercise_repository.getExercisesForSession(sessionId).first()
             Result.success(exercises.map {it.asExercise()})

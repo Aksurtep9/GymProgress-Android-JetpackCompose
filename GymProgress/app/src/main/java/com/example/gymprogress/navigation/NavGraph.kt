@@ -34,16 +34,16 @@ fun NavGraph(
                     type = NavType.IntType
                 }
             ))
-        {
+        {backStackEntry ->
+            val sessionId = backStackEntry.arguments?.getInt("sessionId") ?: -1
+
             SessionScreen(
                 onFinished = { /*TODO*/ },
                 onAddExercise = { /*TODO*/ },
                 onAddNewExerciseType = { /*TODO*/ },
                 onListItemClick = { },
-                onNavigateBack = { navController.popBackStack(
-                    route = Screen.SessionList.route,
-                    inclusive = true
-                )}
+                onNavigateBack = { navController.popBackStack()
+                }
             )
         }
     }
