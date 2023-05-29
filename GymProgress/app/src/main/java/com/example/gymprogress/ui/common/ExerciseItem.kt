@@ -1,5 +1,6 @@
 package com.example.gymprogress.ui.common
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,7 @@ fun ExerciseItem(
     onDelete: () -> Unit,
     onExerciseClick: () -> Unit,
     onAddSetClick: (ExerciseUi) -> Unit,
-    onDeleteClick: (ExerciseUi) -> Unit,
+    onDeleteSetClick: (SetUi) -> Unit,
     sets: List<SetUi>
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -48,14 +49,13 @@ fun ExerciseItem(
     ) {
         Column(
             modifier = Modifier
-                .clickable(onClick = { expanded = !expanded })
                 .padding(16.dp)
+                .clickable { expanded = !expanded }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-
             ) {
                 Text(
                     text = exercise.name,
@@ -67,8 +67,7 @@ fun ExerciseItem(
                         contentDescription = "Add Set"
                     )
                 }
-                Spacer(modifier = Modifier.padding(horizontal = 20.dp))
-                IconButton(onClick = { onDeleteClick(exercise) }) {
+                IconButton(onClick = { onDelete() }) {
                     Icon(
                         imageVector = Icons.Outlined.Delete,
                         contentDescription = "Delete Exercise"
@@ -77,30 +76,37 @@ fun ExerciseItem(
             }
 
             if (expanded) {
-                Divider(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
+                Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-                sets.filter { it.exerciseId == exercise.id }.forEach { set ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    ) {
-                        Text(
-                            text = "Rep: ${set.reps}\t\t Weight: ${set.weight} kg",
-                            modifier = Modifier.weight(1f)
-                        )
-                        IconButton(onClick = { onAddSetClick }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Delete,
-                                contentDescription = "Delete Set"
+                Column {
+                    sets.forEach { set ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        ) {
+                            Text(
+                                text = "Rep: ${set.reps}\t\t Weight: ${set.weight} kg",
+                                modifier = Modifier.weight(1f)
                             )
+                            IconButton(onClick = { onDeleteSetClick(set) }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Delete,
+                                    contentDescription = "Delete Set"
+                                )
+                            }
                         }
+                    }
+                    if (sets.isEmpty()) {
+                        Text(
+                            text = "No sets added",
+                            modifier = Modifier.padding(8.dp)
+                        )
                     }
                 }
             }
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun ExerciseItemPreview() {
@@ -121,7 +127,7 @@ fun ExerciseItemPreview() {
         onDelete = { },
         onExerciseClick = { },
         onAddSetClick = { },
-        onDeleteClick = { },
+        onDeleteSetClick = { },
         sets = sets
     )
 }

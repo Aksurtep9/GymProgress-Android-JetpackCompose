@@ -1,6 +1,7 @@
 package com.example.gymprogress.feature.session_screen
 
 import android.content.IntentSender.OnFinished
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,9 +25,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,13 +43,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymprogress.R
 import com.example.gymprogress.feature.history_screen.HistoryListState
+import com.example.gymprogress.ui.common.AddNewExerciseTypeDialog
 import com.example.gymprogress.ui.common.ExerciseItem
+import com.example.gymprogress.ui.common.SetAdderDialog
+import com.example.gymprogress.ui.model.ExerciseUi
 import com.example.gymprogress.ui.model.toUiText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SessionScreen(
-    //sessionId: Int,
+    sessionId: Int,
     onFinished: () -> Unit,
     onAddExercise: () -> Unit,
     onAddNewExerciseType: () -> Unit,
@@ -57,8 +63,12 @@ fun SessionScreen(
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
-    val showExercisePickerDialog by remember { mutableStateOf(false)}
-    val showExerciseAdderDialog by remember { mutableStateOf(false)}
+    var pickedExercise = ExerciseUi()
+
+    var showSetAdderDialog by remember { mutableStateOf(false)}
+    var showExerciseAdderDialog by remember { mutableStateOf(false)}
+
+    val setsFlow = viewModel.setsFlow.collectAsState()
 
 
     Scaffold(
@@ -70,7 +80,7 @@ fun SessionScreen(
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
             }, actions = {
-                TextButton(onClick = { onFinished }, modifier =  Modifier.size(40.dp) ){
+                TextButton(onClick = { onFinished() }, modifier =  Modifier.size(40.dp) ){
                     Text(text = "Finish")
                     }
                 }
@@ -78,11 +88,13 @@ fun SessionScreen(
         },
         bottomBar = {
             BottomAppBar(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp),horizontalArrangement = Arrangement.SpaceAround) {
-                    TextButton(onClick = { onAddExercise }) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),horizontalArrangement = Arrangement.SpaceAround) {
+                    TextButton(onClick = { onAddExercise() }) {
                         Text(text = "Add exercise")
                     }
-                    TextButton(onClick = { onAddNewExerciseType },modifier = Modifier.size(60.dp) ) {
+                    TextButton(onClick = { showExerciseAdderDialog = true },modifier = Modifier.size(60.dp) ) {
                         Text(text = "Add new exercise type", fontSize = 10.sp)
                     }
                 }
@@ -100,7 +112,7 @@ fun SessionScreen(
                         MaterialTheme.colorScheme.background
                     }
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.TopCenter
         ){
             when (state) {
                 is SessionState.Loading -> CircularProgressIndicator(
@@ -119,13 +131,17 @@ fun SessionScreen(
                         Column {
                             LazyColumn {
                                 items(state.exerciseList.size) { i ->
+                                    viewModel.getSets(state.exerciseList[i])
                                     ExerciseItem(
                                         exercise = state.exerciseList[i],
-                                        onAddSetClick = { /* TODO */ },
+                                        onAddSetClick = { showSetAdderDialog = true
+                                                        pickedExercise = state.exerciseList[i]},
                                         onDelete = { },
-                                        onExerciseClick = { onListItemClick(state.exerciseList[i].id) },
-                                        onDeleteClick = { state.exerciseList[i].id },
-                                        sets = viewModel.getSets()
+                                        onExerciseClick = {
+                                            onListItemClick(state.exerciseList[i].id)
+                                            },
+                                        onDeleteSetClick = { state.exerciseList[i].id },
+                                        sets = setsFlow.value
                                     )
                                 }
                             }
@@ -134,6 +150,22 @@ fun SessionScreen(
                     }
                 }
             }
+        }
+        if(showExerciseAdderDialog){
+            AddNewExerciseTypeDialog(
+                onConfirm = {typeName -> viewModel.createExerciseType(typeName)
+                            showExerciseAdderDialog = false},
+                onDismiss = {showExerciseAdderDialog = false}
+
+            )
+        }
+        if(showSetAdderDialog){
+            SetAdderDialog(exercise = pickedExercise, onConfirm ={
+                set -> viewModel.addSet(set)
+                viewModel.getSets(exercise = pickedExercise)
+                showSetAdderDialog = false
+            }, onDismiss = {showSetAdderDialog = false}
+            )
         }
     }
 }

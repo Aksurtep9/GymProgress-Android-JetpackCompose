@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.gymprogress.data.databases.ExerciseDatabase
 import com.example.gymprogress.data.databases.ExerciseTypeDatabase
+import com.example.gymprogress.data.databases.GymDatabase
 import com.example.gymprogress.data.databases.SessionDatabase
 import com.example.gymprogress.data.databases.SetDatabase
 import com.example.gymprogress.data.repository.ExerciseRepository
@@ -18,10 +19,7 @@ import com.example.gymprogress.data.repository.SetRepositoryImpl
 class GymApplication: Application() {
 
     companion object {
-        private lateinit var sessionDB: SessionDatabase
-        private lateinit var exerciseDB: ExerciseDatabase
-        private lateinit var exerciseTypeDB: ExerciseTypeDatabase
-        private lateinit var setDB: SetDatabase
+        private lateinit var gymDB: GymDatabase
 
         lateinit var sessionRepository: SessionRepository
         lateinit var exerciseRepository: ExerciseRepository
@@ -31,38 +29,20 @@ class GymApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        sessionDB = Room.databaseBuilder(
+        gymDB = Room.databaseBuilder(
             applicationContext,
-            SessionDatabase::class.java,
-            "session_database"
+            GymDatabase::class.java,
+            "gym_database"
         ).fallbackToDestructiveMigration().build()
 
-        sessionRepository = SessionRepositoryImpl(sessionDB.dao)
-/*
-        exerciseDB = Room.databaseBuilder(
-            applicationContext,
-            ExerciseDatabase::class.java,
-            "exercise_database"
-        ).fallbackToDestructiveMigration().build()
+        sessionRepository = SessionRepositoryImpl(gymDB.sessionDao)
 
-        exerciseRepository = ExerciseRepositoryImpl(exerciseDB.dao)
+        exerciseRepository = ExerciseRepositoryImpl(gymDB.exerciseDao)
 
-        exerciseTypeDB = Room.databaseBuilder(
-            applicationContext,
-            ExerciseTypeDatabase::class.java,
-            "exerciseType_database"
-        ).fallbackToDestructiveMigration().build()
+        exerciseTypeRepository = ExerciseTypeRepositoryImpl(gymDB.exercisetypeDao)
 
-        exerciseTypeRepository = ExerciseTypeRepositoryImpl(exerciseTypeDB.dao)
+        setRepository = SetRepositoryImpl(gymDB.setDao)
 
-        setDB = Room.databaseBuilder(
-            applicationContext,
-            SetDatabase::class.java,
-            "set_database"
-        ).fallbackToDestructiveMigration().build()
-
-        setRepository = SetRepositoryImpl(setDB.dao)
-        */
     }
 
 

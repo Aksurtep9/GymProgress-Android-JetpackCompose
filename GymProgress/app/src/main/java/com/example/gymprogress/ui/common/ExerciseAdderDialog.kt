@@ -12,13 +12,11 @@ import com.example.gymprogress.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewExerciseTypeDialog(
-    showDialog: Boolean,
     onDismiss: () -> Unit,
     onConfirm: (String) -> Unit,
 ) {
     var newExerciseType by remember { mutableStateOf("") }
 
-    if (showDialog) {
         AlertDialog(
             onDismissRequest = onDismiss,
             title = { Text(text = stringResource(id = R.string.new_exercise)) },
@@ -45,14 +43,12 @@ fun AddNewExerciseTypeDialog(
                 }
             }
         )
-    }
 }
 
 @Preview
 @Composable
 fun AddNewExerciseTypeDialogPreview() {
     AddNewExerciseTypeDialog(
-        showDialog = true,
         onDismiss = { },
         onConfirm = {  }
     )

@@ -1,4 +1,4 @@
-package com.example.gymprogress.domain.usecases.exercise_type_usecases
+package com.example.gymprogress.domain.usecases.ExerciseTypeUseCases
 
 import com.example.gymprogress.data.repository.ExerciseTypeRepository
 import com.example.gymprogress.domain.model.ExerciseType
