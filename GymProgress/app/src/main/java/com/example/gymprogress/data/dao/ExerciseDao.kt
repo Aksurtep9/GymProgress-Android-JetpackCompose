@@ -1,9 +1,6 @@
 package com.example.gymprogress.data.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.gymprogress.data.entities.ExerciseEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -20,4 +17,9 @@ interface ExerciseDao {
     fun getExerciseById(exerciseId: Int): Flow<ExerciseEntity>
 
     // Add other queries as needed
+    @Query("DELETE FROM exercises WHERE exerciseId = :exerciseId")
+    fun deleteExerciseById(exerciseId: Int)
+
+    @Query("DELETE FROM exercises WHERE sessionId = :sessionId")
+    fun deleteExerciseBySessionId(sessionId: Int)
 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,7 +69,8 @@ fun SessionScreen(
     var showSetAdderDialog by remember { mutableStateOf(false)}
     var showExerciseAdderDialog by remember { mutableStateOf(false)}
 
-    val setsFlow = viewModel.setsFlow.collectAsState()
+    val setsFlow = viewModel.setsFlow.collectAsStateWithLifecycle().value
+
 
 
     Scaffold(
@@ -80,8 +82,8 @@ fun SessionScreen(
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
             }, actions = {
-                TextButton(onClick = { onFinished() }, modifier =  Modifier.size(40.dp) ){
-                    Text(text = "Finish")
+                TextButton(onClick = { onFinished() }, modifier =  Modifier.size(100.dp) ){
+                    Text(text = "Finish", fontSize = 20.sp)
                     }
                 }
             )
@@ -90,12 +92,12 @@ fun SessionScreen(
             BottomAppBar(modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),horizontalArrangement = Arrangement.SpaceAround) {
-                    TextButton(onClick = { onAddExercise() }) {
-                        Text(text = "Add exercise")
+                    .padding(start = 16.dp, end = 16.dp),horizontalArrangement = Arrangement.SpaceBetween) {
+                    TextButton(onClick = { onAddExercise() }, modifier = Modifier.size(120.dp)) {
+                        Text(text = "Add exercise",fontSize = 16.sp)
                     }
-                    TextButton(onClick = { showExerciseAdderDialog = true },modifier = Modifier.size(60.dp) ) {
-                        Text(text = "Add new exercise type", fontSize = 10.sp)
+                    TextButton(onClick = { showExerciseAdderDialog = true },modifier = Modifier.size(120.dp) ) {
+                        Text(text = "Add new exercise type", fontSize = 16.sp, textAlign = TextAlign.Center)
                     }
                 }
             }
@@ -131,17 +133,20 @@ fun SessionScreen(
                         Column {
                             LazyColumn {
                                 items(state.exerciseList.size) { i ->
-                                    viewModel.getSets(state.exerciseList[i])
+
+                                    val exercise = state.exerciseList[i]
+
                                     ExerciseItem(
-                                        exercise = state.exerciseList[i],
+                                        exercise = exercise,
                                         onAddSetClick = { showSetAdderDialog = true
-                                                        pickedExercise = state.exerciseList[i]},
-                                        onDelete = { },
+                                                        pickedExercise = exercise},
+                                        onDelete = { viewModel.deleteExercise(exercise)},
                                         onExerciseClick = {
-                                            onListItemClick(state.exerciseList[i].id)
+                                            onListItemClick(exercise.id)
+                                            setsFlow[exercise.id] ?: emptyList()
                                             },
-                                        onDeleteSetClick = { state.exerciseList[i].id },
-                                        sets = setsFlow.value
+                                        onDeleteSetClick = { viewModel.deleteSet(it) },
+                                        sets = setsFlow[exercise.id] ?: emptyList()
                                     )
                                 }
                             }

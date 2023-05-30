@@ -27,4 +27,18 @@ class SetUseCases(private val repository: SetRepository) {
     suspend fun deleteSet(set: Set){
         repository.deleteSet(set.id)
     }
+
+    suspend fun getSets(): Result<List<Set>>{
+        return try{
+            val sets = repository.getSets().first()
+            Result.success(sets.map {it.asSet()})
+        }
+        catch (e: IOException){
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteSetsByExerciseId(exerciseId: Int){
+        repository.deleteSetsByExerciseId(exerciseId)
+    }
 }

@@ -4,10 +4,17 @@ import com.example.gymprogress.data.repository.ExerciseRepository
 import com.example.gymprogress.domain.usecases.LoadExercisesUseCase
 
 
-class ExerciseUseCases(repository: ExerciseRepository) {
+class ExerciseUseCases(private val repository: ExerciseRepository) {
 
     val loadExercises = LoadExercisesUseCase(repository)
 
     val createExercise = CreateExerciseUseCase(repository)
 
+    suspend fun deleteExerciseById(id: Int){
+        repository.deleteExerciseById(id)
+    }
+
+    suspend fun deleteExercisesBySessionId(sessionId: Int){
+        repository.deleteExerciseBySessionId(sessionId)
+    }
 }

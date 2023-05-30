@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.gymprogress.GymApplication
@@ -20,8 +21,7 @@ import com.example.gymprogress.ui.model.asSet
 import com.example.gymprogress.ui.model.asSetUi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 sealed class SessionState {
@@ -38,10 +38,11 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
     private val _state = MutableStateFlow<SessionState>(SessionState.Loading)
     val state = _state.asStateFlow()
 
-    val setsFlow = MutableStateFlow<List<SetUi>>(emptyList())
+    val setsFlow = MutableStateFlow<Map<Int,List<SetUi>>>(emptyMap())
 
     init {
         loadExercises()
+        fetchSets()
     }
 
     private fun loadExercises(){
@@ -79,6 +80,23 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
         loadExercises()
     }
 
+    fun deleteExercise(exercise: ExerciseUi){
+        viewModelScope.launch {
+            try{
+                CoroutineScope(coroutineContext).launch(Dispatchers.IO){
+                    val exerciseId = exercise.id
+                    exerciseOperations.deleteExerciseById(exerciseId)
+                    setOperations.deleteSetsByExerciseId(exerciseId)
+                }
+            }
+            catch (e: Exception){
+
+            }
+            loadExercises()
+            fetchSets()
+        }
+    }
+
     fun createExerciseType(name: String){
         viewModelScope.launch {
             try{
@@ -92,11 +110,39 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
         }
     }
 
-    fun addSet(set: SetUi){
+    private fun fetchSets() {
         viewModelScope.launch {
+            try {
+                CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
+                    val result = setOperations.getSets().getOrThrow()
+                        .map { it.asSetUi() }
+                        .groupBy { it.exerciseId }
+
+                    // Add an empty list for exercises without sets
+                    val resultMap = result.toMutableMap()
+
+                    setsFlow.emit(resultMap)
+                }
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
+    fun getSets(exercise: ExerciseUi): List<SetUi> {
+        viewModelScope.launch {
+            fetchSets()
+        }
+
+        return setsFlow.value[exercise.id] ?: emptyList()
+    }
+
+    fun addSet(set: SetUi){
+        viewModelScope.launch(Dispatchers.IO) {
             try{
                 CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
                     setOperations.insertSet(set.asSet())
+                    fetchSets()
                 }
             }
             catch (e: Exception){
@@ -104,20 +150,11 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
             }
         }
     }
-
-    fun getSets(exercise: ExerciseUi) {
-
-        var resultList = emptyList<SetUi>()
-        viewModelScope.launch {
+    fun deleteSet(set: SetUi){
+        viewModelScope.launch(Dispatchers.IO) {
             try{
-                CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
-                    resultList = setOperations.loadSets(exercise.id).getOrThrow()
-                        .map{
-                            it.asSetUi()
-                        }
-                    setsFlow.emit(resultList)
-                    Log.d("ViewModel SET", resultList[0].id.toString())
-                }
+                setOperations.deleteSet(set.asSet())
+                fetchSets()
             }
             catch (e: Exception){
 

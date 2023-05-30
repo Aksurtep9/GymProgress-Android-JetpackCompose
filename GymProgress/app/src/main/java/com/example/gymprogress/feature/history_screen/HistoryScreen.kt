@@ -1,5 +1,7 @@
 package com.example.gymprogress.feature.history_screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,23 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowRight
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.HistoryToggleOff
-import androidx.compose.material.icons.filled.Start
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeFloatingActionButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,6 +48,11 @@ fun HistoryScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(title = { Text(text = "Gym Tracker", fontSize = 20.sp, modifier = Modifier.size(70.dp) )
+                              },
+          )
+        },
         floatingActionButton = {
             LargeFloatingActionButton(
                 onClick = {showDialog =true},
@@ -104,24 +97,73 @@ fun HistoryScreen(
                                            Row(verticalAlignment = Alignment.CenterVertically,
                                                modifier = Modifier.fillMaxWidth(),
                                            horizontalArrangement = Arrangement.SpaceBetween) {
-                                                   IconButton(onClick = { },
-                                                            enabled = !state.sessions[i].finished
-                                                   ){
-                                                       if(!state.sessions[i].finished){
-                                                           Icon(imageVector = Icons.Default.ArrowRight, contentDescription = null, modifier = Modifier.size(40.dp), tint = Color.Green)
-                                                       }
-                                                       else{
-                                                           Icon(imageVector = Icons.Default.HistoryToggleOff, contentDescription = null, modifier = Modifier.size(40.dp))
+                                               Column(modifier = Modifier.weight(1f)) {
+                                                   Row() {
+                                                       IconButton(
+                                                           onClick = { },
+                                                           enabled = !state.sessions[i].finished
+                                                       ) {
+                                                           if (!state.sessions[i].finished) {
+                                                               Icon(
+                                                                   imageVector = Icons.Default.ArrowRight,
+                                                                   contentDescription = null,
+                                                                   modifier = Modifier.size(40.dp),
+                                                                   tint = Color.Green
+                                                               )
+                                                           } else {
+                                                               Icon(
+                                                                   imageVector = Icons.Default.HistoryToggleOff,
+                                                                   contentDescription = null,
+                                                                   modifier = Modifier.size(40.dp)
+                                                               )
 
+                                                           }
+                                                       }
+                                                       IconButton(onClick = {
+                                                           val session = state.sessions[i]
+                                                           val uriString = "geo:${session.latitude},${session.longitude}?z=10?q=${session.latitude},${session.longitude}(${session.name})"
+                                                           val gmmIntentUri =
+                                                               Uri.parse(uriString)
+                                                           val mapIntent =
+                                                               Intent(
+                                                                   Intent.ACTION_VIEW,
+                                                                   gmmIntentUri
+                                                               )
+                                                           mapIntent.setPackage("com.google.android.apps.maps")
+
+                                                           startActivity(context, mapIntent, null)
+
+                                                       }) {
+                                                           Icon(
+                                                               Icons.Default.Public,
+                                                               contentDescription = null
+                                                           )
                                                        }
                                                    }
-                                               Text(text = state.sessions[i].name,
-                                               fontSize = 24.sp,
-                                               modifier = Modifier.padding(20.dp))
-                                               IconButton(
-                                                   onClick = {},
-                                               ){
-                                                    Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                                               }
+                                               Column(modifier = Modifier.weight(3f)) {
+                                                   Row(
+                                                       horizontalArrangement = Arrangement.SpaceAround,
+                                                       verticalAlignment = Alignment.CenterVertically
+
+                                                   ) {
+                                                       Text(
+                                                           text = state.sessions[i].name,
+                                                           fontSize = 24.sp,
+                                                           modifier = Modifier.padding(20.dp)
+                                                       )
+
+                                                   }
+                                               }
+                                               Column(modifier = Modifier.weight(1f)) {
+                                                   IconButton(
+                                                       onClick = {},
+                                                   ) {
+                                                       Icon(
+                                                           imageVector = Icons.Default.Delete,
+                                                           contentDescription = null
+                                                       )
+                                                   }
                                                }
                                            }
                                        },

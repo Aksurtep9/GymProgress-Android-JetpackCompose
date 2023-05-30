@@ -18,6 +18,14 @@ class SetRepositoryImpl(private val setDao: SetDao): SetRepository {
     }
 
     override suspend fun deleteSet(id: Int) {
-        setDao.deleteSet(id)
+        setDao.deleteSetById(id)
+    }
+
+    override fun getSets(): Flow<List<SetEntity>> {
+        return setDao.getSets()
+    }
+
+    override suspend fun deleteSetsByExerciseId(exerciseId: Int) {
+        setDao.deleteSetsByExerciseId(exerciseId)
     }
 }

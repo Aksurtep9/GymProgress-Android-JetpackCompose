@@ -20,5 +20,6 @@ interface SessionDao {
     @Query("SELECT * FROM sessions WHERE id = :sessionId")
     fun getSessionById(sessionId: Int): Flow<SessionEntity>
 
-    // Add other queries as needed
+    @Query("DELETE FROM sessions WHERE id = :sessionId")
+    fun deleteSessionById(sessionId: Int)
 }

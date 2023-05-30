@@ -50,7 +50,8 @@ fun ExerciseItem(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .clickable { expanded = !expanded }
+                .clickable { expanded = !expanded
+                onExerciseClick()}
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

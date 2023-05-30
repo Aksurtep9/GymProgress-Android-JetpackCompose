@@ -19,4 +19,12 @@ class ExerciseRepositoryImpl(private val exerciseDao: ExerciseDao) : ExerciseRep
     override fun getExerciseById(exerciseId: Int): Flow<ExerciseEntity> {
         return exerciseDao.getExerciseById(exerciseId)
     }
+
+    override suspend fun deleteExerciseById(exerciseId: Int) {
+        return exerciseDao.deleteExerciseById(exerciseId)
+    }
+
+    override suspend fun deleteExerciseBySessionId(sessionId: Int) {
+        return exerciseDao.deleteExerciseBySessionId(sessionId)
+    }
 }

@@ -10,5 +10,9 @@ interface SetRepository {
 
     fun getSetById(id: Int): Flow<SetEntity>
 
+    fun getSets(): Flow<List<SetEntity>>
+
     suspend fun deleteSet(id: Int)
+
+    suspend fun deleteSetsByExerciseId(exerciseId: Int)
 }

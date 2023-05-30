@@ -26,7 +26,7 @@ fun NavGraph(
                     navController.navigate(Screen.Session.createRoute(it))
                 },
                 onFabClick = {
-                    //TODO: Navigate to create screen
+
                 }
             )
         }

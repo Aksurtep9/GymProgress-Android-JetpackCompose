@@ -8,4 +8,8 @@ interface ExerciseRepository {
     suspend fun insertExercise(exercise: ExerciseEntity)
     fun getExercisesForSession(sessionId: Int): Flow<List<ExerciseEntity>>
     fun getExerciseById(exerciseId: Int): Flow<ExerciseEntity>
+
+    suspend fun deleteExerciseById(exerciseId: Int)
+
+    suspend fun deleteExerciseBySessionId(sessionId: Int)
 }

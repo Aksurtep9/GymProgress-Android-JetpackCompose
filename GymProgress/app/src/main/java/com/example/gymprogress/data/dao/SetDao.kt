@@ -17,9 +17,16 @@ interface SetDao {
     @Query("SELECT * FROM sets WHERE exercise_Id = :exerciseId")
     fun getSetsForExercise(exerciseId: Int): Flow<List<SetEntity>>
 
+    @Query("SELECT * FROM sets")
+    fun getSets(): Flow<List<SetEntity>>
+
+
     @Query("SELECT * FROM sets WHERE id = :setId")
     fun getSetById(setId: Int): Flow<SetEntity>
 
     @Query("DELETE FROM sets WHERE id = :id")
-    suspend fun deleteSet(id: Int)
+    suspend fun deleteSetById(id: Int)
+
+    @Query("DELETE FROM sets WHERE exercise_Id = :id")
+    suspend fun deleteSetsByExerciseId(id: Int)
 }
