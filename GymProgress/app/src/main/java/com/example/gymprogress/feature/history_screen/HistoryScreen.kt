@@ -1,6 +1,11 @@
 package com.example.gymprogress.feature.history_screen
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -32,8 +38,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymprogress.R
 import com.example.gymprogress.ui.common.SessionAdderDialog
 import com.example.gymprogress.ui.model.toUiText
+import com.example.gymprogress.util.PermissionsUtil.getTextToShowGivenPermissions
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun HistoryScreen(
     onListItemClick: (Int) -> Unit,
@@ -44,7 +54,18 @@ fun HistoryScreen(
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
+    var locationListener: LocationListener
+
+
     var showDialog by remember { mutableStateOf(false) }
+    var showPermissionDialog by remember { mutableStateOf(false) }
+
+    var locationManager: LocationManager =
+    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+
+
+    val locationPermission = rememberMultiplePermissionsState(permissions = listOf(android.Manifest.permission.ACCESS_COARSE_LOCATION))
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -181,12 +202,42 @@ fun HistoryScreen(
                     }
                 }
             }
-        if(showDialog){
-            SessionAdderDialog(onConfirm ={
-                 viewModel.onSave(it)
-                showDialog = false },
-            onDismiss = { showDialog = false}
-            )
+        if(showDialog) {
+            if (ContextCompat.checkSelfPermission( context,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
+            {
+                //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, locationListener)
+
+                SessionAdderDialog(onConfirm = {
+                    viewModel.onSave(it)
+                    showDialog = false
+                },
+                    onDismiss = { showDialog = false }
+                )
+            }
+            else{
+                showPermissionDialog = true
+            }
         }
+        if(showPermissionDialog){
+            AlertDialog(
+                onDismissRequest = { showPermissionDialog = false},
+                confirmButton = {
+                    Button(onClick = { locationPermission.launchMultiplePermissionRequest()
+                                        showPermissionDialog = false}) {
+                        Text(stringResource(id = R.string.button_label_request_permission))
+                    }
+                },
+                text = {
+                    Text(
+                        getTextToShowGivenPermissions(
+                            locationPermission.revokedPermissions,
+                            locationPermission.shouldShowRationale,
+                            context
+                        )
+                    )
+            }
+            )
+
         }
     }
+}

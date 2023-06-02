@@ -1,5 +1,8 @@
 package com.example.gymprogress.feature.history_screen
 
+import android.content.Context
+import android.location.LocationManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -7,7 +10,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.gymprogress.GymApplication
 import com.example.gymprogress.domain.usecases.SessionUseCases
-import com.example.gymprogress.feature.session_screen.SessionState
 import com.example.gymprogress.ui.model.SessionUi
 import com.example.gymprogress.ui.model.asSession
 import com.example.gymprogress.ui.model.asSessionUi
@@ -15,7 +17,6 @@ import com.example.gymprogress.ui.util.UiEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -44,6 +45,8 @@ class HistoryViewModel(private val sessionOperations: SessionUseCases) : ViewMod
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+
 
     init {
         loadSessions()
@@ -75,7 +78,7 @@ class HistoryViewModel(private val sessionOperations: SessionUseCases) : ViewMod
         }
     }
 
-    fun onSave(name: String){
+    fun onSave(name: String, ){
         viewModelScope.launch {
             try{
                 _state.update { it.copy(
