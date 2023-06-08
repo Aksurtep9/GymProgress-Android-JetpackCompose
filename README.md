@@ -70,7 +70,7 @@ A plusz gombbal létrehozhatunk egy session-t, a kuka gombbal törölhetjük.
 A felső navigációs menüben a "csillag" gombbal navigálhatunk a statisztika nézetre
 
 <p align="center">
-<img src="./assets/image1_base.png" width="320">
+<img src="./assets/image1.png" width="320">
 
 1. ábra: Főmenü kinézete
 </p>
@@ -127,21 +127,29 @@ A statisztika y koordinátája az adott edzés adott feladatához tartozó max s
 
 ## Felhasznált technológiák:
 
-Itt kell felsorolni minden technológiát, technikát, külső könyvtárat, komplexebb algoritmust, ami növeli az alkalmazás értékét. Osztályzáskor ezt a fejezetet nézzük meg először.
+A feladat során több technológiával, architektúrával volt lehetőségem dolgozni.
 
-Külső osztálykönyvtár használata esetén a könyvtár neve legyen link, ami annak elérhetőségére mutat.
 
-A kulcsszavak legyenek **félkövér** betűtípussal szedve.
-Például:
-
-- •	Az X és Y képernyők optimalizáltak **álló és fekvő nézetre** is
-- [YCharts](https://github.com/yml-org/YCharts) osztálykönyvtár használata a grafikonok rajzolására
-- **Fused Location API** használata helymeghatározásra
-- **SQLite** alapú adattárolás
-- Implicit intent használata **QR kód beolvasáshoz** (telepített Barcode Scanner alkalmazás szükséges a futtatásához)
-- A játék fizikáját a [Box2D](https://box2d.org/) motor biztosítja
-- **Service** használata zenelejátszáshoz
+- **MVVM** architektúra
+- [Charty](https://github.com/hi-manshu/Charty) osztálykönyvtár használata a grafikonok rajzolására
+- **Compose UI** Jetpack compose alapú UI
+- **Lazy Column** Komplex listás megjelenítésére
+- **SQLite** alapú több táblából álló adatbázis
+- **Flow & Coroutine** használata az adatbázis eléréséhez
+- **Filtering searchbar** A találatokat szűkítő kereső mező
+- **NAVGRAPH** Navigáció kezelése NavGraph-al
 
 ## Fontosabb technológiai megoldások
 
-**A számodra legnehezebb/legérdekesebb funkciót fejtsd ki kb.  10 mondatban, hogy mi volt a probléma és hogyan oldottad meg.**
+Számomra a legnehezebb feladat abból adódott, hogy külön repository kezelte a különböző adattáblát.
+A Session nézet ViewModel-jében szükség volt például az összes repositoryra, hogy elérhessük az összes adattáblát.
+
+Mivel minden adatbázisból jött ezért sokszor nem volt egyértelmű, hogy miért nem jelenik meg valami a képernyőn.
+A legproblémásabb a Session nézetben kártyában felsorolandó Set -ek voltak, amikre létrehoztam egy külön **MutableStateFlow Map-t**
+Nem volt egyszerű a LineChart implementálása se, mert az adatokat külön fel kellett dolgoznom előtte és utána betöltenem
+LineData-ként a LineChart-nak. Illetve a legördülő menü megvalósítása se volt egyszerű.
+
+Komplexebb egyszerre több táblát kezelő SQL műveleteket nem tud a Room kezelni, pedig szükségem lett volna rá.
+Ha újrakezdhetném, FireBase-be kiszervezném az összes BackEnd műveletet.
+
+A helymeghatározás sajnos nem sikerült, az engedélykérésnél elbukott a dolog valamiért. :/
