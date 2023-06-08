@@ -17,4 +17,12 @@ class SessionRepositoryImpl(private val sessionDao: SessionDao): SessionReposito
         return sessionDao.getSessionById(id)
     }
 
+    override fun deleteSessionById(id: Int) {
+        sessionDao.deleteSessionById(id)
+    }
+
+    override fun updateSessionFinished(finished: Boolean, id: Int) {
+        sessionDao.updateSessionFinished(finished,id)
+    }
+
 }

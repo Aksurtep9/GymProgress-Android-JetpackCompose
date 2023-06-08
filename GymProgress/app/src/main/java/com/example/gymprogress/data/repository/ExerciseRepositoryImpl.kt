@@ -16,6 +16,10 @@ class ExerciseRepositoryImpl(private val exerciseDao: ExerciseDao) : ExerciseRep
         return exerciseDao.getExercisesForSession(sessionId)
     }
 
+    override fun getExercisesByName(name: String): Flow<List<ExerciseEntity>> {
+        return exerciseDao.getExercisesByName(name)
+    }
+
     override fun getExerciseById(exerciseId: Int): Flow<ExerciseEntity> {
         return exerciseDao.getExerciseById(exerciseId)
     }
@@ -26,5 +30,9 @@ class ExerciseRepositoryImpl(private val exerciseDao: ExerciseDao) : ExerciseRep
 
     override suspend fun deleteExerciseBySessionId(sessionId: Int) {
         return exerciseDao.deleteExerciseBySessionId(sessionId)
+    }
+
+    override suspend fun updateMaxWeightforId(newMaxWeight: Float, exerciseId: Int) {
+        return exerciseDao.updateMaxWeightForId(newMaxWeight,exerciseId)
     }
 }

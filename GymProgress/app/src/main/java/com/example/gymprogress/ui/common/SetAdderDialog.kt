@@ -19,9 +19,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.gymprogress.R
 import com.example.gymprogress.ui.model.ExerciseUi
 import com.example.gymprogress.ui.model.SetUi
 
@@ -37,7 +39,7 @@ fun SetAdderDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Add Set") },
+        title = { Text(text = stringResource(id = R.string.add_set)) },
         text = {
             Column(Modifier.padding(vertical = 8.dp)) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -47,7 +49,7 @@ fun SetAdderDialog(
                             var _weight = it
                             weight = _weight.toFloat()
                         },
-                        label = { Text(text = "Weight") },
+                        label = { Text(text = stringResource(id = R.string.weight)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number
                         ),
@@ -76,12 +78,12 @@ fun SetAdderDialog(
         },
         confirmButton = {
             TextButton(onClick = { onConfirm(SetUi(exerciseId = exercise.id, weight = weight, reps = count)) }) {
-                Text(text = "OK")
+                Text(text = stringResource(id = R.string.Ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = "Cancel")
+                Text(text = stringResource(id = R.string.Cancel))
             }
         }
     )

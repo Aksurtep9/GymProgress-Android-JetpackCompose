@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.gymprogress.GymApplication
+import com.example.gymprogress.domain.usecases.ExerciseUseCases.ExerciseUseCases
 import com.example.gymprogress.domain.usecases.SessionUseCases
 import com.example.gymprogress.ui.model.SessionUi
 import com.example.gymprogress.ui.model.asSession
@@ -22,6 +23,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import java.io.IOException
+import java.time.LocalDateTime
 
 
 //HistoryList that stores the sessions
@@ -39,7 +43,11 @@ sealed class HistoryListStateEvent {
     object ChangeFinished: HistoryListStateEvent()
 }
 
-class HistoryViewModel(private val sessionOperations: SessionUseCases) : ViewModel(){
+class HistoryViewModel(private val sessionOperations: SessionUseCases,
+                       private val exerciseOperations: ExerciseUseCases
+
+
+) : ViewModel(){
     private val _state = MutableStateFlow(HistoryListState())
     val state = _state.asStateFlow()
 
@@ -81,8 +89,14 @@ class HistoryViewModel(private val sessionOperations: SessionUseCases) : ViewMod
     fun onSave(name: String, ){
         viewModelScope.launch {
             try{
+                val date = LocalDateTime.now()
                 _state.update { it.copy(
-                    createSession = it.createSession.copy(name = name, latitude = 47.497913, longitude = 19.040236)
+                    createSession = it.createSession.copy(name = name, latitude = 47.497913, longitude = 19.040236, date = LocalDate(
+                        date.year,
+                        date.month,
+                        date.dayOfMonth
+                    ).toString()
+                    )
                 ) }
                 sessionOperations.creatSession(state.value.createSession.asSession())
             }
@@ -93,12 +107,30 @@ class HistoryViewModel(private val sessionOperations: SessionUseCases) : ViewMod
         }
     }
 
+    fun deleteSession(session: SessionUi){
+        viewModelScope.launch {
+            try{
+                CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
+                    val sessionId = session.id
+                    exerciseOperations.deleteExercisesBySessionId(sessionId)
+                    sessionOperations.deleteSession.invoke(sessionId)
+                }
+            }
+            catch (e: IOException){
+
+            }
+        }
+        loadSessions()
+    }
+
     companion object{
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val sessionOperations = SessionUseCases(GymApplication.sessionRepository)
+                val exerciseOperations = ExerciseUseCases(GymApplication.exerciseRepository)
                 HistoryViewModel(
-                    sessionOperations = sessionOperations
+                    sessionOperations = sessionOperations,
+                    exerciseOperations = exerciseOperations
                 )
             }
         }

@@ -16,10 +16,16 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercises WHERE exerciseId = :exerciseId")
     fun getExerciseById(exerciseId: Int): Flow<ExerciseEntity>
 
+    @Query("SELECT * FROM exercises WHERE name = :name")
+    fun getExercisesByName(name: String): Flow<List<ExerciseEntity>>
+
     // Add other queries as needed
     @Query("DELETE FROM exercises WHERE exerciseId = :exerciseId")
     fun deleteExerciseById(exerciseId: Int)
 
     @Query("DELETE FROM exercises WHERE sessionId = :sessionId")
     fun deleteExerciseBySessionId(sessionId: Int)
+
+    @Query("UPDATE exercises SET maxWeight = :newMaxWeight WHERE exerciseId = :id")
+    fun updateMaxWeightForId(newMaxWeight: Float, id: Int)
 }

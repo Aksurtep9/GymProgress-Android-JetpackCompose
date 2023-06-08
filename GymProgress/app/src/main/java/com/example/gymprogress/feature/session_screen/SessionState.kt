@@ -1,24 +1,17 @@
 package com.example.gymprogress.feature.session_screen
 
 import android.util.Log
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.lifecycle.*
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.gymprogress.GymApplication
 import com.example.gymprogress.domain.usecases.ExerciseUseCases.ExerciseUseCases
 import com.example.gymprogress.domain.usecases.ExerciseTypeUseCases.ExerciseTypeUseCases
+import com.example.gymprogress.domain.usecases.SessionUseCases
 import com.example.gymprogress.domain.usecases.SetUseCases.SetUseCases
-import com.example.gymprogress.ui.model.ExerciseUi
-import com.example.gymprogress.ui.model.SetUi
-import com.example.gymprogress.ui.model.asExercise
-import com.example.gymprogress.ui.model.asExerciseUi
-import com.example.gymprogress.ui.model.asSet
-import com.example.gymprogress.ui.model.asSetUi
+import com.example.gymprogress.ui.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -32,6 +25,7 @@ sealed class SessionState {
 }
 
 class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
+                       private val sessionOperations: SessionUseCases,
                        private val exerciseTypeOperations: ExerciseTypeUseCases,
                        private val setOperations: SetUseCases,
                        private val savedStateHandle: SavedStateHandle) : ViewModel(){
@@ -110,6 +104,19 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
         }
     }
 
+    fun updateSessionFinished(){
+        viewModelScope.launch {
+            try{
+                CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
+                    val id = checkNotNull<Int>(savedStateHandle["sessionId"])
+                    sessionOperations.updateSessionFinished(true, id)
+                }
+            }
+            catch (e: Error){
+            }
+        }
+    }
+
     private fun fetchSets() {
         viewModelScope.launch {
             try {
@@ -118,13 +125,11 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
                         .map { it.asSetUi() }
                         .groupBy { it.exerciseId }
 
-                    // Add an empty list for exercises without sets
                     val resultMap = result.toMutableMap()
 
                     setsFlow.emit(resultMap)
                 }
             } catch (e: Exception) {
-                // Handle the exception
             }
         }
     }
@@ -142,6 +147,11 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
             try{
                 CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
                     setOperations.insertSet(set.asSet())
+                    var exercise = exerciseOperations.getExerciseById(set.exerciseId).getOrThrow()
+                    if(set.weight > exercise.maxWeight){
+                        exerciseOperations.updateMaxWeightForId(set.weight, set.exerciseId)
+                        loadExercises()
+                    }
                     fetchSets()
                 }
             }
@@ -166,11 +176,13 @@ class SessionViewModel(private val exerciseOperations: ExerciseUseCases,
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val exerciseOperations = ExerciseUseCases(GymApplication.exerciseRepository)
+                val sessionOperations = SessionUseCases(GymApplication.sessionRepository)
                 val exerciseTypeOperations = ExerciseTypeUseCases(GymApplication.exerciseTypeRepository)
                 val setOperations = SetUseCases(GymApplication.setRepository)
                 val savedStateHandle = createSavedStateHandle()
                 SessionViewModel(
                     exerciseOperations = exerciseOperations,
+                    sessionOperations = sessionOperations,
                     exerciseTypeOperations = exerciseTypeOperations,
                     setOperations = setOperations,
                     savedStateHandle

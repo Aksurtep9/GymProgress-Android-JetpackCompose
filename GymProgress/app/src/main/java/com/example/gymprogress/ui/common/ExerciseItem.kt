@@ -25,9 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.gymprogress.R
 import com.example.gymprogress.ui.model.ExerciseUi
 import com.example.gymprogress.ui.model.SetUi
 
@@ -99,7 +101,7 @@ fun ExerciseItem(
                     }
                     if (sets.isEmpty()) {
                         Text(
-                            text = "No sets added",
+                            text = stringResource(id = R.string.no_sets_added),
                             modifier = Modifier.padding(8.dp)
                         )
                     }

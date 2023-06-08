@@ -22,4 +22,7 @@ interface SessionDao {
 
     @Query("DELETE FROM sessions WHERE id = :sessionId")
     fun deleteSessionById(sessionId: Int)
+
+    @Query("UPDATE sessions SET finished = :finished WHERE id = :id")
+    fun updateSessionFinished(finished: Boolean, id: Int)
 }

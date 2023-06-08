@@ -17,4 +17,16 @@
     <string name="permission_grant_ask_rationale">" important. Please grant all of them for the app to function properly."</string>
     <string name="permission_grant_ask_denied">" denied. The app cannot function without them. Please grant all of them."</string>
     <string name="button_label_request_permission">Give the permission</string>
+    <string name="add_new_exercisetype">Add new exercise type</string>
+    <string name="add_new_exercise">Add new exercise</string>
+    <string name="your_exercises">Your exercises</string>
+    <string name="finish">Finish</string>
+    <string name="gym_tracker">Gym tracker</string>
+    <string name="statistics">Statistics</string>
+    <string name="add_set">Add set</string>
+    <string name="weight">Weight</string>
+    <string name="enter_session">Enter session</string>
+    <string name="session_name">Session name</string>
+    <string name="no_sets_added">No sets added</string>
+    <string name="finished">Finished</string>
 </resources>

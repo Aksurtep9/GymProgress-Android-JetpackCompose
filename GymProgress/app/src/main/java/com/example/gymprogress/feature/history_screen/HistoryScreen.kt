@@ -48,6 +48,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 fun HistoryScreen(
     onListItemClick: (Int) -> Unit,
     onFabClick: () -> Unit,
+    onStatClick: () -> Unit,
     viewModel: HistoryViewModel = viewModel(factory = HistoryViewModel.Factory),
 
     ){
@@ -70,8 +71,14 @@ fun HistoryScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(text = "Gym Tracker", fontSize = 20.sp, modifier = Modifier.size(70.dp) )
+            TopAppBar(title = { Text(text = stringResource(id = R.string.gym_tracker), fontSize = 20.sp, modifier = Modifier.size(70.dp) )
                               },
+                actions = {
+                    IconButton(onClick = { onStatClick() }) {
+                        Icon(imageVector = Icons.Default.StarRate, contentDescription = null)
+
+                    }
+                }
           )
         },
         floatingActionButton = {
@@ -178,7 +185,7 @@ fun HistoryScreen(
                                                }
                                                Column(modifier = Modifier.weight(1f)) {
                                                    IconButton(
-                                                       onClick = {},
+                                                       onClick = {viewModel.deleteSession(state.sessions[i])},
                                                    ) {
                                                        Icon(
                                                            imageVector = Icons.Default.Delete,

@@ -76,14 +76,18 @@ fun SessionScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(text = "Your exercises", fontSize = 16.sp ,modifier = Modifier.size(60.dp))},
+            TopAppBar(title = { Text(text = stringResource(id = R.string.your_exercises), fontSize = 16.sp ,modifier = Modifier.size(60.dp))},
                 navigationIcon = {
                     IconButton(onClick = { onNavigateBack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
             }, actions = {
-                TextButton(onClick = { onFinished() }, modifier =  Modifier.size(100.dp) ){
-                    Text(text = "Finish", fontSize = 20.sp)
+                TextButton(onClick = {
+                    viewModel.updateSessionFinished()
+                    onFinished() },
+
+                    modifier =  Modifier.size(100.dp) ){
+                    Text(text = stringResource(id = R.string.finished), fontSize = 18.sp)
                     }
                 }
             )
@@ -93,11 +97,11 @@ fun SessionScreen(
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),horizontalArrangement = Arrangement.SpaceBetween) {
-                    TextButton(onClick = { onAddExercise() }, modifier = Modifier.size(120.dp)) {
-                        Text(text = "Add exercise",fontSize = 16.sp)
+                    TextButton(onClick = { onAddExercise() },enabled = !viewModel.finished, modifier = Modifier.size(120.dp)) {
+                        Text(text = stringResource(id = R.string.add_new_exercise),fontSize = 16.sp)
                     }
-                    TextButton(onClick = { showExerciseAdderDialog = true },modifier = Modifier.size(120.dp) ) {
-                        Text(text = "Add new exercise type", fontSize = 16.sp, textAlign = TextAlign.Center)
+                    TextButton(onClick = { showExerciseAdderDialog = true },enabled = !viewModel.finished,modifier = Modifier.size(120.dp) ) {
+                        Text(text = stringResource(id = R.string.add_new_exercisetype), fontSize = 16.sp, textAlign = TextAlign.Center)
                     }
                 }
             }
@@ -126,7 +130,7 @@ fun SessionScreen(
                 )
 
                 is SessionState.Result -> {
-                    //state.sessionList
+
                     if (state.exerciseList.isEmpty()) {
                         Text(text = stringResource(id = R.string.text_empty_exercise_list))
                     } else {

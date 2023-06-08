@@ -9,4 +9,5 @@ sealed class Screen (val route: String){
     object ExerciseTypes : Screen("exercise_picker/{sessionId}"){
         fun createRoute(_sessionId: Int) = "exercise_picker/$_sessionId"
     }
+    object Statistic : Screen("stat")
 }

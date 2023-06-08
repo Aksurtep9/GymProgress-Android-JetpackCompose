@@ -9,4 +9,8 @@ interface SessionRepository {
     fun getAllSessions(): Flow<List<SessionEntity>>
 
     fun getSessionById(id: Int): Flow<SessionEntity>
+
+    fun deleteSessionById(id: Int)
+
+    fun updateSessionFinished(finished: Boolean, id: Int)
 }

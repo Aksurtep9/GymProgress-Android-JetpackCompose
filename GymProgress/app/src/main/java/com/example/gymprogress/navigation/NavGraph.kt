@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.example.gymprogress.feature.choose_exercise_screen.ChooseExerciseScreen
 import com.example.gymprogress.feature.history_screen.HistoryScreen
 import com.example.gymprogress.feature.session_screen.SessionScreen
+import com.example.gymprogress.feature.statistic_screen.StatisticScreen
 
 @Composable
 fun NavGraph(
@@ -27,6 +28,9 @@ fun NavGraph(
                 },
                 onFabClick = {
 
+                },
+                onStatClick = {
+                    navController.navigate(Screen.Statistic.route)
                 }
             )
         }
@@ -38,12 +42,12 @@ fun NavGraph(
             ))
         {   backStackEntry ->
             val sessionId = backStackEntry.arguments?.getInt("sessionId") ?: -1
-            Log.d("MINE-NAVGRAPH-SESSION", sessionId.toString())
+            Log.d("MY-NAVGRAPH-SESSION", sessionId.toString())
             SessionScreen(
                 sessionId =sessionId,
-                onFinished = { /*TODO*/ },
+                onFinished = { navController.navigate(Screen.SessionList.route) },
                 onAddExercise = { navController.navigate(Screen.ExerciseTypes.createRoute(sessionId)) },
-                onAddNewExerciseType = { /*TODO*/ },
+                onAddNewExerciseType = {  },
                 onListItemClick = { },
                 onNavigateBack = { navController.popBackStack()
                 }
@@ -57,11 +61,15 @@ fun NavGraph(
                 )){
                 backStackEntry ->
             val sessionId = backStackEntry.arguments?.getInt("sessionId") ?: -1
-            Log.d("MINE-NAVGRAPH", sessionId.toString())
+            Log.d("MY-NAVGRAPH", sessionId.toString())
             ChooseExerciseScreen(
                 sessionId = sessionId,
                 onExerciseTypeClick = { navController.popBackStack() }
             )
+        }
+        composable(Screen.Statistic.route
+        ){
+            StatisticScreen(onNavigateBack = { navController.popBackStack() })
         }
     }
 }

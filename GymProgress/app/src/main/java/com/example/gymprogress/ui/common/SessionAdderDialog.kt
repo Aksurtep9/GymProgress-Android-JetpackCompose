@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.gymprogress.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,12 +21,12 @@ fun SessionAdderDialog(
     }
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text(text = "Enter Session") },
+        title = { Text(text = stringResource(id = R.string.enter_session)) },
         text = {
             TextField(
                 value = sessionName,
                 onValueChange = { sessionName = it },
-                label = { Text(text = "Session name") },
+                label = { Text(text = stringResource(id = R.string.session_name)) },
                 modifier = Modifier.run { fillMaxWidth().padding(16.dp) }
             )
         },
@@ -33,14 +34,14 @@ fun SessionAdderDialog(
             Button(
                 onClick = { onConfirm(sessionName); onDismiss() },
             ) {
-                Text(text = "OK")
+                Text(text = stringResource(id = R.string.Ok))
             }
         },
         dismissButton = {
             Button(
                 onClick = { onDismiss() },
             ) {
-                Text(text = "Cancel")
+                Text(text = stringResource(id = R.string.Cancel))
             }
         }
     )
