@@ -41,62 +41,115 @@ ___
 
 # Házi feladat dokumentáció
 
-### [Alkalmazás neve]
+### [GymProgress]
 
 <img src="./assets/icon.png" width="160">
 
-**Legkésőbb a dokumentáció fázisban lecserélendő a saját ikonnal!**
 
 ## Bemutatás
 
-Az alkalmazás rövid, 2-3 mondatos bemutatása. Honnan az ötlet, mi szülte az igényt, ki lehetne a célközönség.
-A laboron és előadáson bemutatott alkalmazásokat nem lehet házi feladatnak választani.
+Idén elkezdtem konditerembe járni és egy-egy embernél láttam egy olyan alkalmazást, amivel követni tudták a teljesítményüket.
+Innen jött a terv, hogy akkor csinálok magamnak egy ilyen alkalmazást az én igényeimre szabva.
+Az alkalmazással követni tudjuk az előrehaladásunk.
 
 ## Főbb funkciók
 
-Az alkalmazás minden funkciójára kiterjedő leírás. Legyen egyértelműen eldönthető, hogy az adott funkció implementálva van-e!
-P.l.: Az alkalmazással lehetőség van térképen megjeleníteni az állomáspontokat és azok A,B,C,D tulajdonságai meg is jelennek (ha elérhetőek).
+Az alkalmazással fel tudunk venni egy edzés "session"-t, abba gyakorlatokat rakni, a gyakorlatokba pedig ismétlés számot a súllyal együtt.
+Továbbá lehetséges a fejlődésünket vizuálisan megjeleníteni. 
+A gyakorlatok neveit nem hívja mindenki ugyanúgy, ezért saját típusokat definiálhatunk.
+
+Tervben volt, egy megoldás, hogy a helyszín is elmentődik a dátum mellett, ez végül nem valósult meg.
 
 
 ## Felhasználói kézikönyv
 
-Az alkalmazás minden funkciójára kiterjedő, teljes körű felhasználói leírás. Az összes releváns képernyőhöz/funkcióhoz tartalmaznia kell képernyőképet!
+Az alkalmazás indulásakor a főmenüben találjuk magunkat, ahol felsorolódnak a Session -k, amiket létrehoztunk. 
+A Session lehet aktív vagy finished, ezt a zöld nyíl vagy az óra jelzi.
+A plusz gombbal létrehozhatunk egy session-t, a kuka gombbal törölhetjük.
 
-A képernyőképekkel kapcsolatos követelmények:
-
-- Android Device Art Generator-ral telefont/tabletet kell rajzolni a képernyő köré!
-	- Mindegy, hogy melyik készüléket választod, de legyen egységes az egész dokumentumban!
-	- Telefonra tervezett képernyőket valamelyik telefon skin-nel, tablet képernyőt (amennyiben készítettél külön) tablet skin-nel készítsünk!
-- Álló képernyőket álló módban, fekvőket fekvő módban rakjuk be! (Értelemszerűen. Ha fekvő képernyőképet húzol be a generator-ba, akkor fekvő módban rajzolja köré az eszközt)
--	Minden képhez legyen képaláírás, ami leírja hogy mit kell nézni a képen!
--	A képeket úgy méretezzük, hogy álló telefon méretből kettő elférjen egymás mellett egy sorban (fekvő illetve tablet képeket ehhez viszonyítva nagyítsuk)!
--	Amennyiben gesztúra vezérlést akarunk bemutatni a képernyőn, jelezzük a gesztúrát is! (ld példa kép)
--	A képeket és a képaláírásokat középre igazítsuk!
+A felső navigációs menüben a "csillag" gombbal navigálhatunk a statisztika nézetre
 
 <p align="center">
 <img src="./assets/image1.png" width="320">
+
+1. ábra: Főmenü kinézete
+</p>
+
+A Session-re rákattintva átnavigálunk a Session nézetére. Itt a Session-höz tartozó gyakorlatok.
+A gyakorlatok kártyák, amikre rákattintva kinyílnak és akkor megjelennek alatta a az ismétlések a súlyokkal együtt.
+A felső menüben visszanavigálni tudunk vagy finished-re átállítani az edzést.
+
+<p align="center">
 <img src="./assets/image2.png" width="320">
 
-1. ábra: Gesztúrával és gombbal is navigálható képernyők, hasznos kényelmi funkció a felhasználónak ha több lehetőséget is biztosítunk a navigációra
+2. ábra: A gyakorlatok és benne az ismétlések felsorolva.
 </p>
+
+A kártyán lévő + gombbal hozzá tudunk adni az adott gyakorlathoz egy újabb ismétlést az alábbi felugró ablakban.
+
+<p align="center">
+<img src="./assets/image3.png" width="320">
+
+3. ábra: Az ismétlés hozzáadó ablak.
+</p>
+
+Az alsó navigációs menüvel létre tudunk hozni egy új feladat típust. 
+A felugró dialógus ablakba beírva a feladat nevét, az hozzáadódik egy listához és az innentől kezdve meg fog jelenni a feladat típus kiválasztóban.
+
+<p align="center">
+<img src="./assets/image4.png" width="320">
+
+4. ábra: A feladat nevét a felugró ablakba kell csak beírni.
+</p>
+
+Ha a másik navigációs gombra kattintunk, átkerülünk a feladat létrehozó menüben. 
+Itt tudjuk kikeresni a következő feladat nevét és arra rákattintva visszanavigálódunk a Session nézetre.
+
+<p align="center">
+
+<img src="./assets/image5.png" width="320">
+
+5. ábra: A keresőmezőbe beírt kifejezés szűkíti a találatok számát
+</p>
+
+
+A statisztika nézetben a felső leugró menüben ki kell választani a felajánlott feladatokból. Arra kattintva frissül a statisztika
+A statisztika y koordinátája az adott edzés adott feladatához tartozó max súly, az x koordináta pedig az dátuma az edzésnek.
+Így könnyen nyomon tudjuk követni az előrehaladásunk.
+
+<p align="center">
+<img src="./assets/image6.png" width="320">
+
+6. ábra: A felső leugró menüben tudjuk kiválasztani az általunk már létrehozott feladat neveket
+</p>
+
+
 
 ## Felhasznált technológiák:
 
-Itt kell felsorolni minden technológiát, technikát, külső könyvtárat, komplexebb algoritmust, ami növeli az alkalmazás értékét. Osztályzáskor ezt a fejezetet nézzük meg először.
+A feladat során több technológiával, architektúrával volt lehetőségem dolgozni.
 
-Külső osztálykönyvtár használata esetén a könyvtár neve legyen link, ami annak elérhetőségére mutat.
 
-A kulcsszavak legyenek **félkövér** betűtípussal szedve.
-Például:
-
-- •	Az X és Y képernyők optimalizáltak **álló és fekvő nézetre** is
-- [YCharts](https://github.com/yml-org/YCharts) osztálykönyvtár használata a grafikonok rajzolására
-- **Fused Location API** használata helymeghatározásra
-- **SQLite** alapú adattárolás
-- Implicit intent használata **QR kód beolvasáshoz** (telepített Barcode Scanner alkalmazás szükséges a futtatásához)
-- A játék fizikáját a [Box2D](https://box2d.org/) motor biztosítja
-- **Service** használata zenelejátszáshoz
+- **MVVM** architektúra
+- [Charty](https://github.com/hi-manshu/Charty) osztálykönyvtár használata a grafikonok rajzolására
+- **Compose UI** Jetpack compose alapú UI
+- **Lazy Column** Komplex listás megjelenítésére
+- **SQLite** alapú több táblából álló adatbázis
+- **Flow & Coroutine** használata az adatbázis eléréséhez
+- **Filtering searchbar** A találatokat szűkítő kereső mező
+- **NAVGRAPH** Navigáció kezelése NavGraph-al
 
 ## Fontosabb technológiai megoldások
 
-**A számodra legnehezebb/legérdekesebb funkciót fejtsd ki kb.  10 mondatban, hogy mi volt a probléma és hogyan oldottad meg.**
+Számomra a legnehezebb feladat abból adódott, hogy külön repository kezelte a különböző adattáblát.
+A Session nézet ViewModel-jében szükség volt például az összes repositoryra, hogy elérhessük az összes adattáblát.
+
+Mivel minden adatbázisból jött ezért sokszor nem volt egyértelmű, hogy miért nem jelenik meg valami a képernyőn.
+A legproblémásabb a Session nézetben kártyában felsorolandó Set -ek voltak, amikre létrehoztam egy külön **MutableStateFlow Map-t**
+Nem volt egyszerű a LineChart implementálása se, mert az adatokat külön fel kellett dolgoznom előtte és utána betöltenem
+LineData-ként a LineChart-nak. Illetve a legördülő menü megvalósítása se volt egyszerű.
+
+Komplexebb egyszerre több táblát kezelő SQL műveleteket nem tud a Room kezelni, pedig szükségem lett volna rá.
+Ha újrakezdhetném, FireBase-be kiszervezném az összes BackEnd műveletet.
+
+A helymeghatározás sajnos nem sikerült, az engedélykérésnél elbukott a dolog valamiért. :/

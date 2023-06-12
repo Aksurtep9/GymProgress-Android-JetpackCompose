@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">GymProgress</string>
+    <string name="some_error_message">There was an error!</string>
+    <string name="text_empty_todo_list">You haven\\ \'t added any sessions yet</string>
+    <string name="list_item_supporting_text">Support Text test</string>
+    <string name="exercises">The exercises:</string>
+    <string name="text_empty_exercise_list">There are no exercises yet.</string>
+    <string name="new_exercise">New exercise type</string>
+    <string name="Ok">Ok</string>
+    <string name="Cancel">Cancel</string>
+    <string name="new_exercise_type">Exercise type</string>
+    <string name="permission_grant_ask_beginning">The</string>
+    <string name="permission_grant_ask_separator_before_last_permission">, and</string>
+    <string name="permission_grant_ask_separator">,</string>
+    <string name="permission_grant_ask_singular_permission">" permission is"</string>
+    <string name="permission_grant_ask_multiple_permissions">" permissions are"</string>
+    <string name="permission_grant_ask_rationale">" important. Please grant all of them for the app to function properly."</string>
+    <string name="permission_grant_ask_denied">" denied. The app cannot function without them. Please grant all of them."</string>
+    <string name="button_label_request_permission">Give the permission</string>
+    <string name="add_new_exercisetype">Add new exercise type</string>
+    <string name="add_new_exercise">Add new exercise</string>
+    <string name="your_exercises">Your exercises</string>
+    <string name="finish">Finish</string>
+    <string name="gym_tracker">Gym tracker</string>
+    <string name="statistics">Statistics</string>
+    <string name="add_set">Add set</string>
+    <string name="weight">Weight</string>
+    <string name="enter_session">Enter session</string>
+    <string name="session_name">Session name</string>
+    <string name="no_sets_added">No sets added</string>
+    <string name="finished">Finished</string>
+</resources>
